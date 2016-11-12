@@ -1,0 +1,12 @@
+html
+    head
+        include head.pug
+    body.fullbleed.layout.vertical
+        paper-header-panel
+            include toolbar.pug
+            paper-drawer-panel(force-narrow=true)
+                paper-header-panel(drawer)
+                    div menu
+                paper-header-panel(main)
+                  section.main
+                    block content

@@ -1,0 +1,39 @@
+<dom-module id="formulario-empleado">
+  <style>
+    paper-input, paper-checkbox{
+      padding-right: 20px;
+    }
+  </style>
+  <template>
+    <div class="layout horizontal wrap">
+      <paper-input label="Nombre" required=true value='{{empleado.nombre}}' name='nombre'></paper-input>
+      <paper-input label="Primer apellido" required=true value='{{empleado.primer_apellido}}' name='primer_apellido'></paper-input>
+      <paper-input label="Segundo apellido" value='{{empleado.segundo_apellido}}' name='segundo_apellido'></paper-input>
+      <paper-input label="RFC" required=true value='{{empleado.rfc}}' name='rfc'></paper-input>
+      <paper-input label="CURP" value='{{empleado.curp}}' name='curp'></paper-input>
+      <paper-input label="Adscripción" value='{{empleado.adscripcion}}' name='adscripcion'></paper-input>
+      <paper-input label="Puesto" value='{{empleado.puesto}}' name='puesto'></paper-input>
+      <paper-checkbox checked='{{empleado.activo}}'>Activo</paper-checkbox>
+      <input type="hidden" name="activo" value="{{empleado.activo}}">
+      <paper-checkbox checked='{{empleado.titular}}'>Titular del área</paper-checkbox>
+      <input type="hidden" name="titular" value="{{empleado.titular}}">
+    </div>
+  </template>
+  <script>
+    Polymer(
+      {
+        is:'formulario-empleado',
+        properties:{
+          empleado:Object
+        },
+        ready:()=>{
+          
+        },
+        changeCheckbox:(e)=>{
+          var val=e.currentTarget.checked;
+          console.log(val);
+        }
+      }
+    );
+  </script>
+</dom-module>

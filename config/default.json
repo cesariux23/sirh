@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "mongodb": "mongodb://localhost:27017/recursoshumanos",
+  "public": "../public/",
+  "auth": {
+    "token": {
+      "secret": "S6H2Fh8RNeOuFiZwkC4DQCSGEfvw2qQZfGYb2941in+tgW7kk++bRBP+yh0Uiwu7je0yAAiNoAGz8H88W6VZqA=="
+    },
+    "local": {}
+  }
+}

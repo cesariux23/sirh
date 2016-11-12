@@ -1,0 +1,34 @@
+extends /layout/aplication.pug
+block content
+  h1
+    ="Empleados"
+  paper-card
+    table
+      thead
+        tr
+          th="RFC"
+          th="Nombre"
+          th="Tipo contrato"
+          th="Puesto"
+          th="Nivel"
+          th="Adscripción"
+          th="acciones"
+            
+      tbody
+        each e in data.data
+          tr(ondblclick='verDetalles()' id=e._id)
+            td
+              x-rfc(rfc=e.rfc)
+            td=e.nombre+" "+e.primer_apellido+" "+e.segundo_apellido
+            td=e.tipo_contrato
+            td=e.puesto
+            td=e.nivel
+            td=e.adscripcion
+            td="editar"
+    x-pagination(total=data.total, current-page=page, page-size=limit)
+
+  script.
+    function verDetalles(){
+      var e=event.currentTarget;
+      window.location="/empleados/"+e.id;
+    }

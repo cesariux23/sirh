@@ -1,0 +1,8 @@
+extends /layout/aplication.pug
+block content
+  fab-back
+  paper-card(heading="Registro del empleado")
+    div.container
+      form(method="post")
+        formulario-empleado
+        button(type='submit')="Enviar"

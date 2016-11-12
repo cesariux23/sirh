@@ -1,0 +1,33 @@
+<dom-module id='x-rfc'>
+  <style>
+    span.error{
+      color: red;
+    }
+    span.homoclave{
+      color: #1976D2;
+    }
+  </style>
+  <template>
+    <span id="rfc">{{rfc}}</span><span class="homoclave">{{homoclave}}</span>
+  </template>
+  <script>
+    Polymer({
+      is:'x-rfc',
+      properties:{
+        rfc:String,
+        homoclave:String
+      },
+      ready:function(){
+        if(this.rfc.length>10){
+          this.homoclave=this.rfc.substring(10,this.rfc.length);
+          this.rfc=this.rfc.substring(0,10);
+        }
+        if(this.homoclave== null ){
+          this.$.rfc.classList.add('error');
+        }
+          
+          
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,8 @@
+extends /layout/aplication.pug
+block content
+  fab-back
+  paper-card(heading="Editar información del empleado")
+    div.container
+      form(method="post")
+        formulario-empleado(empleado=data)
+        button(type='submit')="Enviar"

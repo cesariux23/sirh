@@ -1,0 +1,22 @@
+<dom-module id="fab-back">
+  <template>
+    <paper-fab icon="arrow-back" on-click="goBack"></paper-fab>
+  </template>
+  <script>
+    Polymer(
+      {
+        is:'fab-back',
+        ready:()=>{
+          var d=window.location.href;
+          var lastSlash=d.lastIndexOf("/");
+          this.url=d.substr(0,lastSlash);
+        },
+        goBack:()=>{
+          window.location=this.url;
+        }
+        
+      }
+    )
+  </script>
+</dom-module>
+    

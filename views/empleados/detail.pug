@@ -1,0 +1,137 @@
+div.container
+  div.layout.horizontal
+    div.left-container
+      div.center.dato
+        p
+          x-fotografia(foto=data.fotografia)
+        strong
+          =data.nombre
+          br
+          =data.primer_apellido
+      div.dato
+        span="RFC"
+        br
+        strong
+          x-rfc(rfc=data.rfc)
+      div.dato
+        span="CURP"
+        br
+        strong=data.curp
+      div.dato
+        span="Fecha de nacimiento"
+        br
+        strong=data.fecha_nacimiento
+      div.dato
+        span="Sexo"
+        br
+        strong=data.sexo
+      div.dato
+        span="Edad"
+        br
+        strong=data.edad
+
+    div.right-container
+
+      h3="Datos laborales"
+      hr
+      div.layout.horizontal
+        div.dato.largo
+          span="Tipo contrato"
+          br
+          strong=data.tipo_contrato
+        div.dato.largo
+          span="Número de empleado"
+          br
+          strong=data.numero_empleado
+        div.dato.largo
+          span="Fecha de ingreso"
+          br
+          strong=data.fecha_ingreso
+        div.dato.largo
+          span="Número de seguridad social"
+          br
+          strong=data.numero_seguridad_social
+      div.layout.horizontal
+        div.dato.largo
+          span="Tipo pago"
+          br
+          strong=data.tipo_pago
+        div.dato.largo
+          span="Banco"
+          br
+          strong=data.banco
+        div.dato.largo
+          span="Número de cuenta"
+          br
+          strong=data.cuenta_bancaria
+      div.layout.horizontal
+        div.dato.largo
+          span="Puesto"
+          br
+          strong=data.puesto
+        div.dato.largo
+          span="Nivel"
+          br
+          strong=data.nivel_puesto
+        div.dato.largo
+          span="Adscripción"
+          br
+          strong=data.adscripcion
+      div.dato.largo
+          strong="Actividades"
+          br
+          =data.actividades
+      h3="Datos personales"
+      hr
+      div.layout.horizontal
+        div.dato.largo
+          span="Dirección"
+          br
+          strong=data.dirección
+        div.dato
+          span="C.P."
+          br
+          strong=data.cp
+        div.dato.largo
+          span="Colonia"
+          br
+          strong=data.colonia
+        div.dato.largo
+          span="Municipio"
+          br
+          strong=data.municipio
+
+      div.layout.horizontal
+        div.dato.largo
+          span="Telefono celular"
+          br
+          strong=data.telefono_celular
+        div.dato.largo
+          span="Telefono de casa"
+          br
+          strong=data.telefono_casa
+      div.layout.horizontal
+        div.dato.largo
+          span="Estado civil"
+          br
+          strong=data.estado_civil
+        div.dato.largo
+          span="Tiene hijos"
+          br
+          strong=data.tiene_hijos
+        div.dato.largo
+          span="Menores de edad"
+          br
+          strong=data.tiene_hijos_menores
+        div.dato.largo
+          span="Hijos registrados en el instituto"
+          br
+          strong=data.hijos_registrados
+      h3="Formación"
+      hr
+      div.layout.horizontal
+
+        div.dato.largo
+          span="Escolaridad"
+          br
+          strong=data.escolaridad
