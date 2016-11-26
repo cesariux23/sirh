@@ -1,0 +1,84 @@
+<link rel='import' href='import-moment.html'>
+<dom-module id="x-fecha">
+  <template>
+    <template is="dom-if" if="{{mostrarFecha}}">
+      {{parsed}}
+    </template>
+    <template is="dom-if" if="{{mostrarHace}}">
+      <span>
+        <iron-icon icon="help-outline">
+        </iron-icon>
+        <paper-tooltip>
+          Hace {{hace}}
+        </paper-tooltip>
+      </span>
+    </template>
+    <template is="dom-if" if="{{mostrarAnio}}">
+      {{anios}} años
+    </template>
+    <template is="dom-if" if="{{mostrarAntiguedad}}">
+      {{hace}}
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is:"x-fecha",
+      properties:{
+        fecha:{
+          type:Date,
+          value:null,
+          observer: '_fechaChanged'
+        },
+        hace: {
+          type: String,
+          // when `first` or `last` changes `computeFullName` is called once
+          // and the value it returns is stored as `fullName`
+          computed: 'calculaHace(fecha)'
+        },
+        mostrarFecha:Boolean,
+        mostrarAnio:Boolean,
+        mostrarHace:Boolean,
+        mostrarAntiguedad:Boolean
+      },
+      _fechaChanged: function(newValue, oldValue) {
+        let fecha=moment(newValue).utc();
+        this.parsed=fecha.format('ll');
+        this.anios=moment().utc().diff(fecha, 'years');
+      },
+      calculaHace:(f)=>{
+        let hace="";
+        let fecha=moment(f).utc();
+        a=moment().utc().diff(fecha, 'years');
+        //calcula los meses
+        if(a>0){
+          hace+=a+" año";
+          if(a>1)
+            hace+="s";
+        }
+        //calcula los meses
+        fecha=fecha.add(a, 'y');
+        m=moment().utc().diff(fecha, 'months');
+        if(m>0){
+          if(hace.length>0)
+            hace+=', ';
+          hace+=m+" mes";
+          if(m>1)
+            hace+="es";
+        }
+        //calcula los dias
+        fecha=fecha.add(m, 'M');
+        d=moment().utc().diff(fecha, 'days');
+        if(d>0){
+          if(hace.length>0)
+            hace+=' y ';
+
+            hace+=d+" día";
+          if(d>1)
+            hace+="s";
+        }
+        return hace;
+      }
+
+    })
+  </script>
+</dom-module>

@@ -17,6 +17,8 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
     "iron-icons": "PolymerElements/iron-icons#^1.1.3",
     "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
-    "paper-pagination": "^0.2.2"
+    "paper-pagination": "^0.2.2",
+    "vaadin-date-picker": "^1.1.4",
+    "moment-element": "abdonrd/moment-element#^0.4.3"
   }
 }

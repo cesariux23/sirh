@@ -1,8 +1,6 @@
 extends /layout/aplication.pug
 block content
-  h1
-    ="Empleados"
-  paper-card
+  paper-card(heading="Empleados")
     table
       thead
         tr
@@ -13,18 +11,36 @@ block content
           th="Nivel"
           th="Adscripción"
           th="acciones"
-            
+
       tbody
         each e in data.data
           tr(ondblclick='verDetalles()' id=e._id)
             td
               x-rfc(rfc=e.rfc)
-            td=e.nombre+" "+e.primer_apellido+" "+e.segundo_apellido
+            td=e.apellidos+" "+e.nombre
             td=e.tipo_contrato
-            td=e.puesto
-            td=e.nivel
-            td=e.adscripcion
-            td="editar"
+            if e.puesto.clave
+              td
+                x-puesto(puesto=e.puesto)
+
+            else
+              td=e.puesto.descripcion
+            td
+              x-dato(dato=e.puesto.nivel)
+            td
+              if e.titular==true
+                strong=e.adscripcion.clave+" - "+e.adscripcion.nombre
+              else
+                span=e.adscripcion.clave+" - "+e.adscripcion.nombre
+            td
+              a(href="/empleados/"+e._id+"/edit")
+                paper-icon-button(icon="create")
+    div
+      strong=data.skip+1
+      =" - "
+      strong=data.skip+data.data.length
+      =" de "
+      strong= data.total
     x-pagination(total=data.total, current-page=page, page-size=limit)
 
   script.

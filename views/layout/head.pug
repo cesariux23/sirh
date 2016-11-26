@@ -8,7 +8,7 @@ style.
   div#main section.main{
     padding:15px;
   }
-  
+
   section.main paper-fab{
     margin-bottom:10px;
   }
@@ -16,10 +16,10 @@ style.
     width:100%;
   }
   section.main paper-card table{
-    padding:10px;
+    padding:16px;
     width:100%;
   }
-  
+
   section.main paper-card table td{
     padding:4px;
   }
@@ -57,7 +57,40 @@ style.
     min-width:200px;
     padding-right:20px;
   }
-  
-  
-  
-  
+  .largo{
+  width:350px;
+  }
+  .extra{
+  width:550px;
+  }
+  .jumbo{
+  width:750px;
+  }
+  .corto{
+  width:150px;
+  }
+  .mini{
+  width:70px;
+  }
+
+
+script(type="text/javascript" src="/socket.io/socket.io.js")
+script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/core-js/2.1.4/core.min.js")
+script(type="text/javascript" src="//unpkg.com/feathers-client@^1.0.0/dist/feathers.js")
+script(type="text/javascript" src="/bower_components/moment/min/moment-with-locales.min.js")
+script(type="text/javascript").
+  var socket = io('/');
+  var app = feathers()
+    .configure(feathers.hooks())
+    .configure(feathers.socketio(socket));
+
+  var messageService = app.service('empleados');
+
+  messageService.on('created', function(message) {
+    console.log('Someone created a message', message);
+  });
+
+  messageService.create({
+    text: 'Message from client'
+  });
+  moment.locale('es');

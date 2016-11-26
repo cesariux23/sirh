@@ -1,0 +1,28 @@
+<dom-module id="x-puesto">
+  <template>
+    <style>
+      span{
+        color: #777;
+      }
+    </style>
+    {{puesto.descripcion}}
+    <template is="dom-if" if="{{_tieneClave(puesto)}}">
+      <br>
+      <span>{{puesto.clave}}</span>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is:"x-puesto",
+      properties:{
+        puesto:Object
+      },
+      _tieneClave:(p)=>{
+        if(p.clave)
+          return true;
+        else
+          return false;
+      }
+    })
+  </script>
+</dom-module>

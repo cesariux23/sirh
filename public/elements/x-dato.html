@@ -1,0 +1,33 @@
+<dom-module id="x-dato">
+  <template>
+    <template is="dom-if" if="{{_existe(dato)}}">
+      {{dato}}
+    </template>
+    <template is="dom-if" if="{{_noExiste(dato)}}">
+      --
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is:"x-dato",
+      properties:{
+        dato:{
+          type:String,
+          value:null
+        }
+      },
+      _existe:(d)=>{
+        if(d)
+          return true;
+        else
+          return false;
+      },
+      _noExiste:(d)=>{
+        if(d == null)
+          return true;
+        else
+          return false;
+      }
+    })
+  </script>
+</dom-module>

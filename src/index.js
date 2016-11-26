@@ -14,7 +14,9 @@ const favicon = require('serve-favicon');
 const feathers = require('feathers');
 const configuration = require('feathers-configuration');
 const api = require('./api');
+const ModelEmpleado= require('./services/empleado/empleado-model');
 const bodyParser = require('body-parser');
+const moment = require('moment');
 
 // Initialize the application
 const app = feathers();
@@ -34,24 +36,29 @@ app
   //body parser
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }));
-  
+
 //configuration pug
 app.locals.basedir = path.join(__dirname, '../views');
+//configuration fro moment
+moment.locale('es');
+app.locals.moment = moment;
 
 //routes
 app.get('/empleados', function(req, res, next){
-  var limit=20;
+  var limit=req.query.limit? req.query.limit: 14;
   var page=req.query.page ? req.query.page : 1;
   var skip=req.query.page>0 ? (req.query.page-1)*limit : 0;
-
+  let activo=req.query.hasOwnProperty('activo') ? req.query.activo: true;
   api.service('empleados')
     .find({
       paginate: {
         default: limit,
         max: 25
       },
+
       query: {
-        $sort: {adscripcion:1, titular:-1 },
+        activo:activo,
+        $sort: {adscripcion:1, titular:-1, tipo_contrato:1, primer_apellido:1, segundo_apellido:1 },
         $skip:skip
       }
     })
@@ -61,7 +68,9 @@ app.get('/empleados', function(req, res, next){
 
 //new empleado
 app.get('/empleados/new', function(req, res, next){
-  res.render('empleados/new');
+  //se crea un objeto vacio
+  let obj=new ModelEmpleado();
+  res.render('empleados/new', {data:obj});
 });
 
 //post empleado
@@ -70,7 +79,7 @@ app.post('/empleados/new', function(req, res, next){
   api.service('empleados')
     .create(data)
     .then(result => res.redirect('/empleados/'+result._id))
-    
+
 });
 //view empleado details
 app.get('/empleados/:id', function(req, res, next){
@@ -94,6 +103,39 @@ app.post('/empleados/:id/edit', function(req, res, next){
   api.service('empleados')
     .patch(req.params.id,data)
     .then(result => res.redirect('/empleados/'+req.params.id))
+});
+
+//edit empleado
+app.get('/actualizar', function(req, res, next){
+  var data=req.body;
+  api.service('empleados').find({paginate: {
+    default: 500,
+    max: 500
+  }})
+  .then(
+    result=>{
+      result.data.forEach((e)=>{
+          var apellidos='';
+          if(e.primer_apellido)
+            apellidos=e.primer_apellido;
+          if(e.segundo_apellido != null){
+            if(apellidos.length>0)
+              apellidos+=" ";
+            apellidos+=e.segundo_apellido;
+          }
+          e.apellidos = apellidos;
+          ModelEmpleado.update({_id:e.id},{$set:{apellidos:apellidos}});
+          // api.service('empleados').patch(
+          //   e._id,
+          //   {
+          //   apellidos:apellidos
+          // }).then(result =>{
+          //   console.log(result.apellidos);
+          // })
+      });
+      res.send('ok');
+    }
+  );
 });
 
 

@@ -1,4 +1,6 @@
 'use strict';
+const plazas = require('./plazas');
+const adscripcion = require('./adscripcion');
 const empleado = require('./empleado');
 const authentication = require('./authentication');
 const user = require('./user');
@@ -12,4 +14,6 @@ module.exports = function() {
   app.configure(authentication);
   app.configure(user);
   app.configure(empleado);
+  app.configure(adscripcion);
+  app.configure(plazas);
 };

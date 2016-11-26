@@ -7,7 +7,7 @@ div.container
         strong
           =data.nombre
           br
-          =data.primer_apellido
+          =data.apellidos
       div.dato
         span="RFC"
         br
@@ -20,7 +20,8 @@ div.container
       div.dato
         span="Fecha de nacimiento"
         br
-        strong=data.fecha_nacimiento
+        strong
+          x-fecha(fecha=data.fecha_nacimiento mostrar-fecha="1")
       div.dato
         span="Sexo"
         br
@@ -28,30 +29,32 @@ div.container
       div.dato
         span="Edad"
         br
-        strong=data.edad
+        strong
+          x-fecha(fecha=data.fecha_nacimiento mostrar-anio="1")
 
     div.right-container
 
       h3="Datos laborales"
       hr
-      div.layout.horizontal
+      div.layout.horizontal.wrap
         div.dato.largo
           span="Tipo contrato"
           br
           strong=data.tipo_contrato
         div.dato.largo
-          span="Número de empleado"
+          span="Número de personal"
           br
-          strong=data.numero_empleado
+          strong=data.numero_personal
         div.dato.largo
           span="Fecha de ingreso"
           br
-          strong=data.fecha_ingreso
+          strong
+            x-fecha(fecha=data.fecha_ingreso mostrar-fecha="1" mostrar-hace="1")
         div.dato.largo
           span="Número de seguridad social"
           br
           strong=data.numero_seguridad_social
-      div.layout.horizontal
+      div.layout.horizontal.wrap
         div.dato.largo
           span="Tipo pago"
           br
@@ -64,26 +67,28 @@ div.container
           span="Número de cuenta"
           br
           strong=data.cuenta_bancaria
-      div.layout.horizontal
+      div.layout.horizontal.wrap
         div.dato.largo
           span="Puesto"
           br
-          strong=data.puesto
+          strong
+            x-puesto(puesto=data.puesto)
         div.dato.largo
           span="Nivel"
           br
-          strong=data.nivel_puesto
+          strong
+            x-dato(dato=data.puesto.nivel)
         div.dato.largo
           span="Adscripción"
           br
-          strong=data.adscripcion
-      div.dato.largo
+          strong=data.adscripcion.nombre
+      div
           strong="Actividades"
           br
           =data.actividades
       h3="Datos personales"
       hr
-      div.layout.horizontal
+      div.layout.horizontal.wrap
         div.dato.largo
           span="Dirección"
           br
@@ -101,7 +106,7 @@ div.container
           br
           strong=data.municipio
 
-      div.layout.horizontal
+      div.layout.horizontal.wrap
         div.dato.largo
           span="Telefono celular"
           br
@@ -110,7 +115,7 @@ div.container
           span="Telefono de casa"
           br
           strong=data.telefono_casa
-      div.layout.horizontal
+      div.layout.horizontal.wrap
         div.dato.largo
           span="Estado civil"
           br
@@ -129,7 +134,7 @@ div.container
           strong=data.hijos_registrados
       h3="Formación"
       hr
-      div.layout.horizontal
+      div.layout.horizontal.wrap
 
         div.dato.largo
           span="Escolaridad"

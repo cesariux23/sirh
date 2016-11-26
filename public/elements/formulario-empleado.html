@@ -1,21 +1,114 @@
 <dom-module id="formulario-empleado">
   <style>
-    paper-input, paper-checkbox{
+    paper-input, paper-checkbox, paper-dropdown-menu, paper-textarea{
       padding-right: 20px;
+    }
+    div.baja{
+      border: 2px solid #FFA000;
+      padding: 20px;
     }
   </style>
   <template>
+    <iron-ajax
+    auto
+    url="/api/adscripciones"
+    handle-as="json"
+    last-response={{adscripciones}}
+    ></iron-ajax>
     <div class="layout horizontal wrap">
-      <paper-input label="Nombre" required=true value='{{empleado.nombre}}' name='nombre'></paper-input>
-      <paper-input label="Primer apellido" required=true value='{{empleado.primer_apellido}}' name='primer_apellido'></paper-input>
-      <paper-input label="Segundo apellido" value='{{empleado.segundo_apellido}}' name='segundo_apellido'></paper-input>
-      <paper-input label="RFC" required=true value='{{empleado.rfc}}' name='rfc'></paper-input>
-      <paper-input label="CURP" value='{{empleado.curp}}' name='curp'></paper-input>
-      <paper-input label="Adscripción" value='{{empleado.adscripcion}}' name='adscripcion'></paper-input>
-      <paper-input label="Puesto" value='{{empleado.puesto}}' name='puesto'></paper-input>
-      <paper-checkbox checked='{{empleado.activo}}'>Activo</paper-checkbox>
-      <input type="hidden" name="activo" value="{{empleado.activo}}">
-      <paper-checkbox checked='{{empleado.titular}}'>Titular del área</paper-checkbox>
+        <paper-dropdown-menu label="Tipo de contrato" required=true>
+           <paper-listbox class="dropdown-content"  attr-for-selected="name" selected="{{empleado.tipo_contrato}}">
+            <paper-item name="HONORARIOS">HONORARIOS</paper-item>
+            <paper-item name="CONFIANZA">CONFIANZA</paper-item>
+            <paper-item name="BASE">BASE</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <input type="hidden" name="tipo_contrato" value="{{empleado.tipo_contrato}}">
+        <paper-input label="Fecha de ingreso" type="date" required=true value='{{fecha_ingreso2}}' name='fecha_ingreso'></paper-input>
+        <paper-checkbox checked='{{empleado.activo}}'>Activo</paper-checkbox>
+        <input type="hidden" name="activo" value="{{empleado.activo}}">
+    </div>
+    <template is="dom-if" if="{{_esInactivo(empleado.activo)}}" class="baja">
+
+      <div class="baja">
+        <h3>Inactivar empleado</h3>
+
+        <div class="layout horizontal wrap">
+          <paper-dropdown-menu label="Motivo inactividad" required=true>
+             <paper-listbox class="dropdown-content"  attr-for-selected="name" selected="{{empleado.inactivo}}">
+              <paper-item name="LICENCIA">LICENCIA</paper-item>
+              <paper-item name="BAJA">BAJA LABORAL</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <template is="dom-if" if="{{_esBaja(empleado.inactivo)}}">
+              <paper-input label="Fecha baja" type="date" required=true value='{{empleado.baja.fecha}}' name='baja[fecha]'></paper-input>
+          </template>
+          <template is="dom-if" if="{{_esLicencia(empleado.inactivo)}}">
+            <paper-input label="Fecha de inicio" type="date" required=true value='{{empleado.licencia.fecha_inicio}}' name='licencia[fecha_inicio]'></paper-input>
+            <paper-input label="Fecha de fin" type="date" required=true value='{{empleado.licencia.fecha_fin}}' name='licencia[fecha_fin]'></paper-input>
+          </template>
+        </div>
+        <template is="dom-if" if="{{_esBaja(empleado.inactivo)}}">
+            <paper-textarea label="Observaciones" value='{{empleado.baja.observaciones}}' name='baja[observaciones]'></paper-textarea>
+        </template>
+        <template is="dom-if" if="{{_esLicencia(empleado.inactivo)}}">
+          <paper-textarea label="Observaciones" value='{{empleado.licencia.observaciones}}' name='licencia[observaciones]'></paper-textarea>
+        </template>
+        </div>
+      </template>
+    <div class="layout horizontal wrap">
+      <paper-input label="RFC" char-counter required value='{{empleado.rfc}}' name='rfc' error-message="Formato no valido" auto-validate pattern="^[A-Za-z]{1}[AEIOUaeiou]{1}[A-Za-z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])([A-Za-z0-9]{3})?" maxlength="13"></paper-input>
+      <paper-input label="CURP" char-counter value='{{empleado.curp}}' name='curp' error-message="Formato no valido" minlength="18" auto-validate pattern="(^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$)|(^[a-z]{1}[aeiou]{1}[a-z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[hm]{1}(as|bc|bs|cc|cs|ch|cl|cm|df|dg|gt|gr|hg|jc|mc|mn|ms|nt|nl|oc|pl|qt|qr|sp|sl|sr|tc|ts|tl|vz|yn|zs|ne)[b-df-hj-np-tv-z]{3}[0-9a-z]{1}[0-9]{1}$)" maxlength="18"></paper-input>
+      <paper-input label="Fecha de nacimiento" type="date" required=true value='{{empleado.fecha_nacimiento}}' name='fecha_nacimiento'></paper-input>
+      <paper-dropdown-menu label="Sexo">
+         <paper-listbox class="dropdown-content"  attr-for-selected="name" selected="{{empleado.sexo}}">
+          <paper-item name="HOMBRE">HOMBRE</paper-item>
+          <paper-item name="MUJER">MUJER</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+    </div>
+    <div class="layout horizontal wrap">
+      <paper-input label="Nombre" required=true value='{{empleado.nombre}}' name='nombre' class="largo" error-message="Campo requerido" auto-validate></paper-input>
+      <paper-input label="Primer apellido" required=true value='{{empleado.primer_apellido}}' name='primer_apellido' class="largo"></paper-input>
+      <paper-input label="Segundo apellido" value='{{empleado.segundo_apellido}}' name='segundo_apellido' class="largo"></paper-input>
+
+      <input type="hidden" name="sexo" value="{{empleado.sexo}}">
+    </div>
+    <div class="layout horizontal wrap">
+      <paper-input label="Clave de la adscripción" value='{{empleado.adscripcion.clave}}' name='adscripcion[clave]' required error-message="Campo requerido" auto-validate></paper-input>
+      <paper-dropdown-menu label="Adscripción" required=true class="jumbo" name='adscripcion[nombre]'>
+         <paper-listbox class="dropdown-content"  attr-for-selected="value" selected="{{empleado.adscripcion.clave}}" iron-select="{{_adscripcionChanged}}">
+           <template is="dom-repeat" items="{{adscripciones.data}}">
+              <paper-item value="{{item._id}}" label="{{item.nombre}}">{{item.nombre}}</paper-item>
+           </template>
+        </paper-listbox>
+      </paper-dropdown-menu>
+    </div>
+    <div class="layout horizontal wrap">
+      <template is="dom-if" if="{{_noEsHonorarios(empleado.tipo_contrato)}}">
+        <iron-ajax
+        auto
+        url="/api/plazas"
+        handle-as="json"
+        last-response={{plazas}}
+        ></iron-ajax>
+        <paper-input label="Clave de la plaza" value='{{empleado.puesto.clave}}' name='puesto[clave]' required error-message="Campo requerido" auto-validate id="clavePlaza"></paper-input>
+        <paper-dropdown-menu label="Nombre de la plaza" required=true class="jumbo" id="descripcionPlaza">
+           <paper-listbox class="dropdown-content jumbo"  attr-for-selected="value" selected="{{empleado.puesto.clave}}">
+             <template is="dom-repeat" items="{{plazas.data}}" filter="esTipoEmpleado" observe="empleado.tipo_contrato item.tipo" id="listPlazas">
+                <paper-item value="{{item.clave}}" label="{{item.descripcion}}" data="{{item}}">{{item.descripcion}} -- ZONA <strong> {{item.zona}}</strong>, NIVEL <strong> {{item.nivel}}</strong></paper-item>
+             </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <paper-input label="Zona eco." value='{{empleado.puesto.zona}}' name='puesto[zona]' required error-message="Requerido" auto-validate id="zonaPlaza" class="mini" disabled></paper-input>
+        <paper-input label="Nivel" value='{{empleado.puesto.nivel}}' name='puesto[nivel]' required error-message="Requerido" auto-validate id="nivelPlaza" class="mini" disabled></paper-input>
+        <paper-checkbox checked='{{empleado.puesto.interinato}}'>Cubre interinato</paper-checkbox>
+        <input type="hidden" name="puesto[interinato]" value="{{empleado.puesto.interinato}}">
+      </template>
+    </div>
+    <div class="layout horizontal wrap">
+      <paper-input label="Nombre del puesto" value='{{empleado.puesto.descripcion}}' name='puesto[descripcion]' id="descripcionPuesto" class="jumbo" placeholder="P. ej., Auxiliar" required></paper-input>
+      <paper-checkbox checked='{{empleado.titular}}'>Es encargado o titular<br>de la adscripción</paper-checkbox>
       <input type="hidden" name="titular" value="{{empleado.titular}}">
     </div>
   </template>
@@ -24,14 +117,87 @@
       {
         is:'formulario-empleado',
         properties:{
-          empleado:Object
+          empleado:{
+            type:Object,
+            value:()=>{
+              return {
+                activo:true,
+                tipo_contrato:'HONORARIOS',
+                adscripcion:{
+                  clave:'130-00'
+                },
+                puesto:{}
+              }
+            }
+          }
         },
+        nombreAdscripcion:{
+          type:String
+        },
+        observers: [
+          'empleadoActivoChanged(empleado.activo)',
+          'empleadoContratoChanged(empleado.tipo_contrato)',
+          'empleadoClavePlazaChanged(empleado.puesto.clave)'
+        ],
         ready:()=>{
-          
         },
-        changeCheckbox:(e)=>{
-          var val=e.currentTarget.checked;
-          console.log(val);
+        esTipoEmpleado: function(item) {
+          return item.tipo == this.empleado.tipo_contrato;
+        },
+        _noEsHonorarios:(contrato)=>{
+            return contrato == "HONORARIOS" ? false : true;
+        },
+        _esBaja:(estado)=>{
+            return estado == "BAJA";
+        },
+        _esLicencia:(estado)=>{
+            return estado == "LICENCIA";
+        },
+        _esHonorarios:(contrato)=>{
+            return contrato == "HONORARIOS" ? true : false;
+        },
+        _esInactivo:(activo)=>{
+            return !activo;
+        },
+        empleadoActivoChanged(activo){
+          if (!activo) {
+            this.empleado.inactivo="BAJA";
+            this.empleado.baja={};
+            this.empleado.baja.fecha=moment().utc().format("YYYY-MM-DD");
+          }
+        },
+        empleadoContratoChanged(contrato){
+          /*
+          *Se busca en la base de datos y se compará con el valor que se esta editando
+          *con la finalidad de verificar que el registro exista en la base de datos
+          *
+          */
+          console.log(contrato);
+          let lista=document.querySelector('#listPlazas');
+          if (lista) {
+            document.querySelector('#clavePlaza').value="";
+            document.querySelector('#zonaPlaza').value="";
+            document.querySelector('#nivelPlaza').value="";
+            lista.render();
+          }
+        },
+        empleadoClavePlazaChanged(clave){
+          this.async(function() {
+            let descripcion=document.querySelector('#descripcionPlaza');
+            if(descripcion){
+              let item=descripcion.selectedItem;
+              if(item){
+                document.querySelector('#nivelPlaza').value=item.data.nivel;
+                document.querySelector('#descripcionPuesto').value=item.data.descripcion;
+                document.querySelector('#zonaPlaza').value=item.data.zona;
+              }
+            }
+          });
+        },
+        attached: function() {
+          this.async(function() {
+            this.fecha_ingreso2=moment(this.empleado.fecha_ingreso).utc().format("YYYY-MM-DD");
+          });
         }
       }
     );
