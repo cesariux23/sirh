@@ -1,13 +1,40 @@
 extends /layout/aplication.pug
+block append styles
+  style.
+    .red{
+      color:red;
+    }
+    div.header{
+      display:flex;
+    }
+    div.actions{
+      width:100%;
+      display:flex;
+      justify-content:flex-end;
+    }
+
+block variables
+  - var back=true
+block subtitulo
+  ="Cardex"
+block acciones
+  a(href="/empleados/"+data._id+"/edit" class="white")
+    paper-button
+      iron-icon(icon="create")
+      =" Editar"
+  paper-icon-button(icon="more-vert")
 block content
-  fab-back
-  paper-card(heading="Cardex")
-    include detail.pug
-           
-          
-              
-          
-      
-      
-      
-        
+  dlg-baja(id="dlgBaja" tipo-contrato=data.tipo_contrato)
+  paper-card
+    div.card-content
+      div.header
+        div.actions
+          a(href="#")
+            paper-button(onClick="abrirDlg()")
+              iron-icon(icon="remove-circle-outline" class="red")
+              =" inactivar empleado"
+      include detail.pug
+  script.
+    abrirDlg=()=>{
+      console.log(document.querySelector('#dlgBaja').abrirDlg());
+    }

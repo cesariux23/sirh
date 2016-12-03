@@ -1,0 +1,167 @@
+<dom-module id="dlg-baja">
+  <style>
+    paper-input, paper-checkbox, paper-dropdown-menu, paper-textarea{
+      padding-right: 20px;
+    }
+    div.alert{
+      margin: 0;
+      padding: 10px;
+      display: flex;
+    }
+    div.alert p{
+    margin-bottom: 0px;
+    }
+    div.alert .icon{
+    display: flex;
+    align-items: center;
+    width: 30px;
+    }
+    div.info{
+      background: #2196F3;
+      color: white;
+    }
+    div.warning{
+      background: #FF5722;
+      color: white;
+    }
+  </style>
+  <template>
+    <!-- dilogos -->
+    <paper-dialog id="dialogoBaja" modal>
+      <h2>{{motivo}} DE PERSONAL DE <b>{{tipoContrato}}</b></h2>
+      <paper-dialog-scrollable>
+        <template is="dom-if" if="{{_esCambio(cambioContrato)}}">
+          <div class="alert info">
+            <div class="icon">
+              <iron-icon icon="error"></iron-icon>
+            </div>
+            <div>
+              <p>El cambio de tipo de contrato generará la baja del empleado como personal de <b>{{tipoContrato}}</b> y la alta como personal de <b>{{cambioContrato}}</b>.</p>
+            </div>
+          </div>
+        </template>
+        <div class="layout horizontal wrap">
+          <paper-dropdown-menu label="Motivo inactividad" required=true>
+             <paper-listbox class="dropdown-content"  attr-for-selected="name" selected="{{motivo}}" id="motivoBaja">
+              <paper-item name="LICENCIA">LICENCIA</paper-item>
+              <paper-item name="BAJA">BAJA LABORAL</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <template is="dom-if" if="{{_esBaja(motivo)}}">
+              <paper-input label="Fecha baja" type="date" required=true value='{{baja.fecha}}' name='baja[fecha]' required error-message="Requerido" auto-validate id="fechaBaja"></paper-input>
+          </template>
+          <template is="dom-if" if="{{_esLicencia(motivo)}}">
+            <paper-input label="Fecha de inicio" type="date" required=true value='{{licencia.fecha_inicio}}' name='licencia[fecha_inicio]' error-message="Requerido" auto-validate></paper-input>
+            <paper-input label="Fecha de fin" type="date" required=true value='{{licencia.fecha_fin}}' name='licencia[fecha_fin]' error-message="Requerido" auto-validate></paper-input>
+          </template>
+        </div>
+        <template is="dom-if" if="{{_esBaja(motivo)}}">
+            <paper-textarea label="Observaciones" value='{{baja.observaciones}}' name='baja[observaciones]'></paper-textarea>
+        </template>
+        <template is="dom-if" if="{{_esLicencia(motivo)}}">
+          <paper-textarea label="Observaciones" value='{{licencia.observaciones}}' name='licencia[observaciones]'></paper-textarea>
+        </template>
+        </div>
+
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss autofocus>Cancelar</paper-button>
+        <paper-button dialog-confirm>Continuar</paper-button>
+      </div>
+    </paper-dialog>
+
+    <paper-dialog id="dialogoContinuar" modal>
+      <h3>CONFIRMACIÓN DE MOVIMIENTO</h3>
+      <paper-dialog-scrollable>
+        <div class="alert warning">
+          <div class="icon">
+            <iron-icon icon="error"></iron-icon>
+          </div>
+          <div>
+            <p>La siguente acción no podrá revertirse.</p>
+          </div>
+        </div>
+        <br>
+        <div>
+          <p>
+            Empleado: <b>CÉSAR ENCARNACIÓN MENDOZA</b>
+            <br>
+            Movimiento: <b>{{motivo}}</b>
+            <br>
+            Fecha: <b>{{formato(baja.fecha)}}</b>
+          </p>
+        </div>
+       </paper-dialog-scrollable>
+
+      <div class="buttons">
+        <paper-button dialog-dismiss autofocus>Cancelar</paper-button>
+        <paper-button dialog-confirm>confirmar {{motivo}}</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+  Polymer(
+    {
+      is:'dlg-baja',
+      properties:{
+        tipoContrato:String,
+        scope:Object,
+        cambioContrato:String,
+        motivo:{
+          type:String,
+          value:'BAJA'
+        },
+        baja:{
+          type:Object,
+          value:()=>{
+            return {
+              fecha:moment().utc().format("YYYY-MM-DD")
+            }
+          }
+        },
+        licencia:{
+          type:Object,
+          value:()=>{
+            return {
+              fecha_inicio:moment().utc().format("YYYY-MM-DD")
+            }
+          }
+        },
+      },
+      listeners:{
+        'dialogoBaja.iron-overlay-closed':'_handleBaja',
+        'dialogoContinuar.iron-overlay-closed':'_handleContinuar'
+      },
+      ready:()=>{
+      },
+      formato:(fecha)=>{
+        console.log('formato');
+        return moment(fecha).utc().format("LL")
+      },
+      abrirDlg:()=>{
+        document.querySelector('#dialogoBaja').open();
+      },
+      _esBaja:(estado)=>{
+          return estado == "BAJA";
+      },
+      _esLicencia:(estado)=>{
+          return estado == "LICENCIA";
+      },
+      _esCambio:(cambio)=>{
+          console.log(cambio);
+          return typeof cambio != 'undefined' ? true: false;
+      },
+      _handleBaja:(e)=>{
+        if(e.detail.confirmed){
+          document.querySelector('#dialogoContinuar').open();
+        }
+      },
+      _handleContinuar:(e)=>{
+        if(e.detail.confirmed){
+          console.log('se realiza la baja');
+        }
+      }
+    }
+  );
+  </script>
+</dom-module>

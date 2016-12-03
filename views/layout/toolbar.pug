@@ -1,4 +1,7 @@
 paper-toolbar
-    paper-icon-button(icon="menu" on-click="toggleDrawer")
-    div.title SI
-        stong RH
+    paper-icon-button(icon="menu" paper-drawer-toggle)
+    if back
+      btn-back(tipo="btn")
+    span.title
+        block subtitulo
+    block acciones

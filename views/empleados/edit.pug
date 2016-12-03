@@ -1,4 +1,15 @@
 extends /layout/aplication.pug
+block variables
+  - var back=true
+block subtitulo
+  ="Empleados"
+  iron-icon(icon="chevron-right")
+  ="Edición"
+block acciones
+  paper-button
+    iron-icon(icon="save")
+    =" guardar"
+  paper-icon-button(icon="more-vert")
 block content
   fab-back
   paper-card(heading="Editar información del empleado")

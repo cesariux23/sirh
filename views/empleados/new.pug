@@ -1,7 +1,11 @@
 extends /layout/aplication.pug
+block variables
+  - var back=true
+block subtitulo
+  ="Registro de empleado"
 block content
   fab-back
-  paper-card(heading="Registro del empleado")
+  paper-card
     div.container
       form(method="post")
         formulario-empleado

@@ -2,7 +2,7 @@
   <template>
     <style>
       :host{
-        padding: 5px;
+        padding: 0px;
       }
       ul.pagination {
           display: inline-block;
@@ -15,7 +15,7 @@
       ul.pagination li a {
           color: black;
           float: left;
-          padding: 8px 16px;
+          padding: 10px;
           text-decoration: none;
           transition: background-color .3s;
       }
@@ -29,20 +29,36 @@
     </style>
     <ul class="pagination">
       <template is="dom-if" if="{{notFirstBlock}}">
-        <li><a href="{{firstPageURL}}"> << </a></li>
+        <li>
+          <a href="{{firstPageURL}}">
+            <iron-icon icon="arrow-back"></iron-icon>
+          </a>
+        </li>
       </template>
       <template is="dom-if" if="{{notFirstPage}}">
-        <li><a href="{{previousPageURL}}"> < </a></li>
+        <li>
+          <a href="{{previousPageURL}}">
+            <iron-icon icon="chevron-left"></iron-icon>
+          </a>
+        </li>
       </template>
       <template is="dom-repeat" items="{{pages}}">
         <li><a href="{{item.URL}}" class$="{{item.class}}"> {{item.page}} </a></li>
       </template>
 
       <template is="dom-if" if="{{notLastPage}}">
-        <li><a href="{{nextPageURL}}"> > </a></li>
+        <li>
+          <a href="{{nextPageURL}}">
+            <iron-icon icon="chevron-right"></iron-icon>
+          </a>
+        </li>
       </template>
       <template is="dom-if" if="{{notLastBlock}}">
-        <li><a href="{{lastPageURL}}"> >> </a></li>
+        <li>
+          <a href="{{lastPageURL}}">
+             <iron-icon icon="arrow-forward"></iron-icon>
+           </a>
+         </li>
       </template>
     </ul>
   </template>

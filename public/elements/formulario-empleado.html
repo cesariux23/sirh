@@ -25,13 +25,15 @@
         </paper-dropdown-menu>
         <input type="hidden" name="tipo_contrato" value="{{empleado.tipo_contrato}}">
         <paper-input label="Fecha de ingreso" type="date" required=true value='{{fecha_ingreso2}}' name='fecha_ingreso'></paper-input>
-        <paper-checkbox checked='{{empleado.activo}}'>Activo</paper-checkbox>
-        <input type="hidden" name="activo" value="{{empleado.activo}}">
+        <template is="dom-if" if="{{_noTieneId(empleado)}}">
+          <paper-checkbox checked='{{empleado.activo}}' id="activo">Activo</paper-checkbox>
+          <input type="hidden" name="activo" id="activo" value="{{empleado.activo}}">
+        </template>
     </div>
     <template is="dom-if" if="{{_esInactivo(empleado.activo)}}" class="baja">
 
       <div class="baja">
-        <h3>Inactivar empleado</h3>
+        <h3>Empleado inactivo</h3>
 
         <div class="layout horizontal wrap">
           <paper-dropdown-menu label="Motivo inactividad" required=true>
@@ -41,7 +43,7 @@
             </paper-listbox>
           </paper-dropdown-menu>
           <template is="dom-if" if="{{_esBaja(empleado.inactivo)}}">
-              <paper-input label="Fecha baja" type="date" required=true value='{{empleado.baja.fecha}}' name='baja[fecha]'></paper-input>
+              <paper-input label="Fecha baja" type="date" required=true value='{{empleado.baja.fecha}}' name='baja[fecha]' required error-message="Requerido" auto-validate></paper-input>
           </template>
           <template is="dom-if" if="{{_esLicencia(empleado.inactivo)}}">
             <paper-input label="Fecha de inicio" type="date" required=true value='{{empleado.licencia.fecha_inicio}}' name='licencia[fecha_inicio]'></paper-input>
@@ -59,18 +61,18 @@
     <div class="layout horizontal wrap">
       <paper-input label="RFC" char-counter required value='{{empleado.rfc}}' name='rfc' error-message="Formato no valido" auto-validate pattern="^[A-Za-z]{1}[AEIOUaeiou]{1}[A-Za-z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])([A-Za-z0-9]{3})?" maxlength="13"></paper-input>
       <paper-input label="CURP" char-counter value='{{empleado.curp}}' name='curp' error-message="Formato no valido" minlength="18" auto-validate pattern="(^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$)|(^[a-z]{1}[aeiou]{1}[a-z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[hm]{1}(as|bc|bs|cc|cs|ch|cl|cm|df|dg|gt|gr|hg|jc|mc|mn|ms|nt|nl|oc|pl|qt|qr|sp|sl|sr|tc|ts|tl|vz|yn|zs|ne)[b-df-hj-np-tv-z]{3}[0-9a-z]{1}[0-9]{1}$)" maxlength="18"></paper-input>
-      <paper-input label="Fecha de nacimiento" type="date" required=true value='{{empleado.fecha_nacimiento}}' name='fecha_nacimiento'></paper-input>
+    </div>
+    <div class="layout horizontal wrap">
+      <paper-input label="Nombre" required=true value='{{empleado.nombre}}' name='nombre' class="largo" error-message="Campo requerido" auto-validate></paper-input>
+      <paper-input label="Primer apellido" required=true value='{{empleado.primer_apellido}}' name='primer_apellido' class="largo"></paper-input>
+      <paper-input label="Segundo apellido" value='{{empleado.segundo_apellido}}' name='segundo_apellido' class="largo"></paper-input>
+      <paper-input label="Fecha de nacimiento" type="date" required=true value='{{empleado.fecha_nacimiento}}' name='fecha_nacimiento' id="fechaNacimiento"></paper-input>
       <paper-dropdown-menu label="Sexo">
          <paper-listbox class="dropdown-content"  attr-for-selected="name" selected="{{empleado.sexo}}">
           <paper-item name="HOMBRE">HOMBRE</paper-item>
           <paper-item name="MUJER">MUJER</paper-item>
         </paper-listbox>
       </paper-dropdown-menu>
-    </div>
-    <div class="layout horizontal wrap">
-      <paper-input label="Nombre" required=true value='{{empleado.nombre}}' name='nombre' class="largo" error-message="Campo requerido" auto-validate></paper-input>
-      <paper-input label="Primer apellido" required=true value='{{empleado.primer_apellido}}' name='primer_apellido' class="largo"></paper-input>
-      <paper-input label="Segundo apellido" value='{{empleado.segundo_apellido}}' name='segundo_apellido' class="largo"></paper-input>
 
       <input type="hidden" name="sexo" value="{{empleado.sexo}}">
     </div>
@@ -107,10 +109,11 @@
       </template>
     </div>
     <div class="layout horizontal wrap">
-      <paper-input label="Nombre del puesto" value='{{empleado.puesto.descripcion}}' name='puesto[descripcion]' id="descripcionPuesto" class="jumbo" placeholder="P. ej., Auxiliar" required></paper-input>
+      <paper-input label="Puesto" value='{{empleado.puesto.descripcion}}' name='puesto[descripcion]' id="descripcionPuesto" class="jumbo" placeholder="P. ej., Auxiliar" required required error-message="Requerido" auto-validate></paper-input>
       <paper-checkbox checked='{{empleado.titular}}'>Es encargado o titular<br>de la adscripción</paper-checkbox>
       <input type="hidden" name="titular" value="{{empleado.titular}}">
     </div>
+    <dlg-baja id="dlgBaja" tipo-contrato="{{tipo_contrato}}" cambio-contrato="{{cambio_contrato}}"></dlg-baja>
   </template>
   <script>
     Polymer(
@@ -123,6 +126,8 @@
               return {
                 activo:true,
                 tipo_contrato:'HONORARIOS',
+                fecha_ingreso:moment().utc(),
+                fecha_nacimiento:Date,
                 adscripcion:{
                   clave:'130-00'
                 },
@@ -134,30 +139,28 @@
         nombreAdscripcion:{
           type:String
         },
+        cambio_contrato:{
+          type:String,
+          notify:true
+        },
         observers: [
           'empleadoActivoChanged(empleado.activo)',
+          'empleadoIdChanged(empleado._id)',
           'empleadoContratoChanged(empleado.tipo_contrato)',
-          'empleadoClavePlazaChanged(empleado.puesto.clave)'
+          'empleadoClavePlazaChanged(empleado.puesto.clave)',
+          'fechaNacimientoChanged(empleado.fecha_nacimiento)'
         ],
-        ready:()=>{
+        listeners:{
+          'dlgBaja.iron-overlay-closed':'_handleCerrar',
         },
-        esTipoEmpleado: function(item) {
-          return item.tipo == this.empleado.tipo_contrato;
-        },
-        _noEsHonorarios:(contrato)=>{
-            return contrato == "HONORARIOS" ? false : true;
-        },
-        _esBaja:(estado)=>{
-            return estado == "BAJA";
-        },
-        _esLicencia:(estado)=>{
-            return estado == "LICENCIA";
-        },
-        _esHonorarios:(contrato)=>{
-            return contrato == "HONORARIOS" ? true : false;
-        },
-        _esInactivo:(activo)=>{
-            return !activo;
+        //observers
+        fechaNacimientoChanged(nacimiento){
+          if(typeof nacimiento === 'string'){
+            let n=moment(nacimiento).utc();
+            if(n.isValid()){
+              document.querySelector('#fechaNacimiento').value=n.format("YYYY-MM-DD");
+            }
+          }
         },
         empleadoActivoChanged(activo){
           if (!activo) {
@@ -166,19 +169,32 @@
             this.empleado.baja.fecha=moment().utc().format("YYYY-MM-DD");
           }
         },
+        empleadoIdChanged(id){
+          console.log(id);
+        },
         empleadoContratoChanged(contrato){
-          /*
-          *Se busca en la base de datos y se compará con el valor que se esta editando
-          *con la finalidad de verificar que el registro exista en la base de datos
-          *
-          */
-          console.log(contrato);
-          let lista=document.querySelector('#listPlazas');
-          if (lista) {
-            document.querySelector('#clavePlaza').value="";
-            document.querySelector('#zonaPlaza').value="";
-            document.querySelector('#nivelPlaza').value="";
-            lista.render();
+          if(this.tipo_contrato){
+            if(this._tieneId(this.empleado) && this.tipo_contrato!=contrato){
+              //ha cambiado de tipo de contrato un objeto que ya estaba registrado en la base de datos
+              this.set('cambio_contrato',contrato);
+              //se abre el dialogo para las bajas
+              this.$.dlgBaja.abrirDlg();
+              //se regresa el valor del contrato
+              this.set('empleado.tipo_contrato',this.tipo_contrato);
+            }else {
+              //es un objeto nuevo
+              //se limpian los valores del objeto
+              document.querySelector('#descripcionPuesto').value="";
+              if(contrato!='HONORARIOS'){
+                let lista=document.querySelector('#listPlazas');
+                if (lista) {
+                  document.querySelector('#clavePlaza').value="";
+                  document.querySelector('#zonaPlaza').value="";
+                  document.querySelector('#nivelPlaza').value="";
+                  lista.render();
+                }
+              }
+            }
           }
         },
         empleadoClavePlazaChanged(clave){
@@ -194,9 +210,46 @@
             }
           });
         },
+        confirmarBaja:()=>{
+          let lista=document.querySelector('#listPlazas');
+          if (lista) {
+            document.querySelector('#clavePlaza').value="";
+            document.querySelector('#zonaPlaza').value="";
+            document.querySelector('#nivelPlaza').value="";
+            lista.render();
+          }
+        },
+        //filters
+        esTipoEmpleado: function(item) {
+          return item.tipo == this.empleado.tipo_contrato;
+        },
+        _noEsHonorarios:(contrato)=>{
+            return contrato == "HONORARIOS" ? false : true;
+        },
+        _tieneId:(empleado)=>{
+          return empleado.hasOwnProperty('_id');
+        },
+        _noTieneId:(empleado)=>{
+          return !empleado.hasOwnProperty('_id');
+        },
+        _esHonorarios:(contrato)=>{
+            return contrato == "HONORARIOS" ? true : false;
+        },
+        _esInactivo:(activo)=>{
+            return !activo;
+        },
+        //cerrar dialogo
+        _handleCerrar:(e)=>{
+          //document.querySelector('#fechaBaja').value=moment().utc().format("YYYY-MM-DD");
+          console.log(e.detail);
+
+        },
+        //parser
         attached: function() {
           this.async(function() {
             this.fecha_ingreso2=moment(this.empleado.fecha_ingreso).utc().format("YYYY-MM-DD");
+            this.tipo_contrato=this.empleado.tipo_contrato;
+            this.puesto=this.empleado.puesto;
           });
         }
       }

@@ -1,6 +1,12 @@
 extends /layout/aplication.pug
+block subtitulo
+  ="Empleados"
+block acciones
+  paper-input.largo.white(placeholder="Buscar por RFC, Nombre, adscripción, etc")
+  a.white(href="/empleados/new")
+    paper-icon-button(icon="social:person-add")
 block content
-  paper-card(heading="Empleados")
+  paper-card
     table
       thead
         tr
@@ -35,15 +41,20 @@ block content
             td
               a(href="/empleados/"+e._id+"/edit")
                 paper-icon-button(icon="create")
-    div
-      strong=data.skip+1
-      =" - "
-      strong=data.skip+data.data.length
-      =" de "
-      strong= data.total
-    x-pagination(total=data.total, current-page=page, page-size=limit)
+    div.card-content
+      div
+        strong=data.skip+1
+        =" - "
+        strong=data.skip+data.data.length
+        =" de "
+        strong= data.total
+      x-pagination(total=data.total, current-page=page, page-size=limit)
 
   script.
+    document.addEventListener("DOMContentLoaded", function(){
+      //almacena la direccion del index
+      localStorage.setItem('empleados',window.location.href);
+      });
     function verDetalles(){
       var e=event.currentTarget;
       window.location="/empleados/"+e.id;

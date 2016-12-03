@@ -1,12 +1,30 @@
 html(lang="es")
-    head
-        include head.pug
-    body.fullbleed.layout.vertical
-        paper-header-panel
-            include toolbar.pug
-            paper-drawer-panel(force-narrow=true)
-                paper-header-panel(drawer)
-                    div menu
-                paper-header-panel(main)
-                  section.main
-                    block content
+  block variables
+    -var back=false
+  head
+      include head.pug
+  body.fullbleed.layout.vertical
+      paper-header-panel
+          paper-drawer-panel(drawer-width="200px")
+              paper-header-panel(drawer)
+                  paper-toolbar
+                    span.title SI
+                      strong="RH"
+                  paper-menu
+                    paper-item
+                      a(href="/empleados")
+                        ="Empleados"
+                    paper-item
+                      a(href="/adscripciones")
+                        ="Adscripciones"
+                    paper-item
+                      a(href="/nominas")
+                        ="Nominas"
+                    paper-item
+                      a(href="/empleados")
+                        ="Catalogos"
+
+              paper-header-panel(main)
+                include toolbar.pug
+                section.main
+                  block content

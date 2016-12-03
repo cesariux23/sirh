@@ -1,0 +1,51 @@
+<dom-module id="btn-back">
+  <template>
+    <template is="dom-if" if="{{_esFab(tipo)}}">
+      <paper-fab icon="arrow-back" on-click="goBack"></paper-fab>
+    </template>
+    <template is="dom-if" if="{{_esBtn(tipo)}}">
+      <paper-icon-button icon="arrow-back" on-click="goBack"></paper-button>
+    </template>
+  </template>
+  <script>
+    Polymer(
+      {
+        is:'btn-back',
+        properties:{
+          tipo:{
+            type:String,
+            value:'fab'
+          }
+        },
+        ready:()=>{
+          var d=window.location.href;
+          this.url=d.substr(0,d.lastIndexOf("/"));
+          console.log(this.url);
+
+          let url=localStorage.getItem("empleados");
+          if(typeof url != 'undefined'){
+            //elimina los parametros
+            back=url.substr(0,url.lastIndexOf("?"));
+            //elimina / final
+            if(back.endsWith('/')){
+              back=url.substr(0,url.lastIndexOf("/"));
+            }
+            if(this.url==back){
+              this.url=url;
+            }
+          }
+        },
+        goBack:()=>{
+          window.location=this.url;
+        },
+        _esBtn:(tipo)=>{
+          return tipo=="btn"? true:false;
+        },
+        _esFab:(tipo)=>{
+          return tipo=="fab"? true:false;
+        }
+
+      }
+    )
+  </script>
+</dom-module>
